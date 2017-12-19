@@ -2,47 +2,128 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>utilities</artifactId>
-        <groupId>eu.linksmart.services.events</groupId>
-        <version>1.7.1-SNAPSHOT</version>
-    </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>mqtt-rquest-response</artifactId>
+    <artifactId>MulticastTunneler</artifactId>
+
+    <groupId>eu.linksmart.services</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Multicast Tunneler</name>
+    <packaging>jar</packaging>
+    <developers>
+        <developer>
+            <id>jacarvajal</id>
+            <email>jose.angel.angel.carvajal&lt;at&gt;fit.fraunhofer.de</email>
+            <name>Jose Angel Carvajal Soto</name>
+            <roles>
+                <role>Developer</role>
+                <role>Researcher</role>
+            </roles>
+            <organization>Fraunhofer FIT</organization>
+            <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
+            <url>http://www.fit.fraunhofer.de/</url>
+        </developer>
+
+    </developers>
+
+
+
+    <organization>
+        <name>Fraunhofer FIT Institute</name>
+        <url>http://www.fit.fraunhofer.de</url>
+    </organization>
+    <distributionManagement>
+
+        <repository>
+            <id>releases</id>
+            <name>Releases</name>
+            <url>https://nexus.linksmart.eu/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Snapshots</name>
+            <url>https://nexus.linksmart.eu/repository/maven-snapshots/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <!--    <site>
+                <id>agents</id>
+                <name>linksmart-service-agents-repository</name>
+                <url>dav:https://nexus.linksmart.eu/repository/iot-agents-site/</url>
+            </site>-->
+    </distributionManagement>
+    <ciManagement>
+        <system>Pipelines</system>
+        <url>https://pipelines.linksmart.eu</url>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <address>angel.carvajal@fit.fraunhofer.de</address>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+    <issueManagement>
+        <system>Jira</system>
+        <url>https://boards.linksmart.eu</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:https://pipelies@code.linksmart.eu/scm/mct/multicasttunneler.git</connection>
+        <developerConnection>scm:git:https://pipelines@code.linksmart.eu/mct/multicasttunneler.git</developerConnection>
+        <url>scm:git:https://pipelines@code.linksmart.eu/scm/mct/multicasttunneler.git</url>
+        <tag>HEAD</tag>
+    </scm>
+    <properties>
+        <java.junit.version>4.12</java.junit.version>
+        <ls.se.agents.version>1.7.1-SNAPSHOT</ls.se.agents.version>
+        <springfox.version>2.7.0</springfox.version>
+        <spring.boot.version>1.3.3.RELEASE</spring.boot.version>
+        <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
+        <apache.fluent.hc.version>4.5.2</apache.fluent.hc.version>
+        <maven.source.version>2.2.1</maven.source.version>
+        <maven.jar.plugin.version>2.6</maven.jar.plugin.version>
+        <start-class>eu.linksmart.services.Application</start-class>
+        <java.version>1.8</java.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>api.agents</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>${java.junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>data.procesing.core</artifactId>
             <scope>test</scope>
+            <version>${ls.se.agents.version}</version>
         </dependency>
         <!-- Spring dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
 
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
             <!-- Import dependency management from Spring Boot -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-dependencies</artifactId>
+            <version>${spring.boot.version}</version>
             <type>pom</type>
         </dependency>
 
@@ -64,27 +145,89 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
+            <version>${apache.fluent.hc.version}</version>
         </dependency>
-
     </dependencies>
     <build>
-        <plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
 
+        <plugins>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <!-- build sources  -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <!-- nothing here -->
+                <version>${maven.jar.plugin.version}</version>
+                <!-- correct versioning on the manifest -->
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-
+                <version>${spring.boot.version}</version>
+                <configuration>
+                    <mainClass>${start-class}</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
-
         </plugins>
+
 
     </build>
 
