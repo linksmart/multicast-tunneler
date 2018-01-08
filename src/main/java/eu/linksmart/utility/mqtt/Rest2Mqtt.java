@@ -76,7 +76,7 @@ public class Rest2Mqtt {
                     null
                     );
         } catch (Exception e) {
-            responses.addResponse(createErrorMapMessage(requestManager.id, "Proxy", 400, "Bad Request", e.getMessage()));
+            responses.addResponse(createErrorMapMessage(MqttRequestManager.id, "Proxy", 400, "Bad Request", e.getMessage()));
 
         }
         return prepareHTTPResponse(responses);
@@ -89,7 +89,7 @@ public class Rest2Mqtt {
 
         // returning error in case neither an error was produced nor success. This case theoretical cannot happen, if it does there is a program error.
         if(result.getResponses().isEmpty()) {
-            result.addResponse(createErrorMapMessage(requestManager.id, "Proxy", 500, "Intern Server Error", "Unknown status"));
+            result.addResponse(createErrorMapMessage(MqttRequestManager.id, "Proxy", 500, "Intern Server Error", "Unknown status"));
             loggerService.error("Impossible state reached");
         }
 
@@ -109,7 +109,7 @@ public class Rest2Mqtt {
     }
 
     public static GeneralRequestResponse createErrorMapMessage(String generatedBy,String producerType,int codeNo, String codeTxt,String message){
-        return new GeneralRequestResponse(codeTxt, requestManager.id,null,producerType,message,codeNo, "");
+        return new GeneralRequestResponse(codeTxt, MqttRequestManager.id,null,producerType,message,codeNo, "");
     }
     public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message){
         return new GeneralRequestResponse(codeTxt, id,processedBy,producerType,message,codeNo, "");

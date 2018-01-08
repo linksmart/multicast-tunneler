@@ -3,16 +3,9 @@ package eu.linksmart.utility.mqtt;
 
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
-import eu.linksmart.services.event.core.StatementInstance;
-import eu.linksmart.services.utils.serialization.DefaultDeserializer;
+import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
-import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.services.utils.serialization.Serializer;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
 
 import static org.junit.Assert.fail;
 
