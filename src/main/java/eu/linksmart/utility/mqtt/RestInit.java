@@ -7,7 +7,8 @@ import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.services.utils.serialization.Serializer;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -45,7 +46,7 @@ import java.util.*;
 @EnableSwagger2
 public class RestInit {
     static Properties info = null;
-    protected transient static Logger loggerService = Utils.initLoggingConf(RestInit.class);
+    protected transient static Logger loggerService = LogManager.getLogger(RestInit.class);
     private static Configurator conf = Configurator.getDefaultConfig();
     private static boolean la = false;
     static final String SPRING_MANAGED_FEATURES = "spring_managed_configuration_features";
@@ -65,7 +66,7 @@ public class RestInit {
         try {
             info = Utils.createPropertyFiles("service.info");
         } catch (IOException e) {
-            Utils.initLoggingConf(RestInit.class).error(e.getMessage(), e);
+            LogManager.getLogger(RestInit.class).error(e.getMessage(), e);
         }
 
 

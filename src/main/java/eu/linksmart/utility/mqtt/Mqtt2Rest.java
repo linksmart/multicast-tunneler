@@ -4,7 +4,6 @@ import eu.linksmart.api.event.types.impl.AsyncRequest;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.subscription.MqttMessageObserver;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
@@ -13,7 +12,8 @@ import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.services.utils.serialization.Serializer;
 import io.swagger.annotations.*;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 13.12.2017 a researcher of Fraunhofer FIT.
  */
 public class Mqtt2Rest implements MqttMessageObserver {
-    private transient static final Logger loggerService = Utils.initLoggingConf(Mqtt2Rest.class);
+    private transient static final Logger loggerService = LogManager.getLogger(Mqtt2Rest.class);
     private transient final static String HTTP_METHOD_STRING = "method",HTTP_HEADERS_STRING = "headers", PATH_SUFFIX ="/rest/", BROKER_PROFILE = "default", SERVICE_WILL="will_message", SERVICE_WILL_TOPIC="will_topic", DEFAULT_TOPIC_STRUCTURE="return_topic_structure",TIMEOUT="timeout";
     private transient static StaticBroker broker;
     private transient static final Configurator conf = Configurator.getDefaultConfig();

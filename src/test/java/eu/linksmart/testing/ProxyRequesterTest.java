@@ -1,21 +1,16 @@
 package eu.linksmart.testing;
 
 
-import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.services.utils.serialization.Serializer;
-import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.junit.Test;
 import org.apache.http.client.fluent.*;
-import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

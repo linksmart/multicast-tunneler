@@ -3,11 +3,11 @@ package eu.linksmart.utility.mqtt;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.serialization.Serializer;
 import io.swagger.annotations.*;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class Rest2Mqtt {
-    protected static Logger loggerService = Utils.initLoggingConf(Rest2Mqtt.class);
+    protected static Logger loggerService = LogManager.getLogger(Rest2Mqtt.class);
     protected Configurator conf = Configurator.getDefaultConfig();
    // public static String id = UUID.randomUUID().toString();
 

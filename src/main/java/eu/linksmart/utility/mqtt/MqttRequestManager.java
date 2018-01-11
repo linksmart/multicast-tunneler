@@ -4,7 +4,6 @@ import eu.linksmart.api.event.types.impl.AsyncRequest;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.subscription.MqttMessageObserver;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
@@ -12,8 +11,9 @@ import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.services.utils.serialization.Serializer;
+import org.apache.logging.log4j.LogManager;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -28,7 +28,7 @@ public class MqttRequestManager<T>  {
     private transient StaticBroker broker;
 
     static transient private Configurator conf = Configurator.getDefaultConfig();
-    static transient private Logger loggerService = Utils.initLoggingConf(MqttRequestManager.class);
+    static transient private Logger loggerService = LogManager.getLogger(MqttRequestManager.class);
     public static final String id = UUID.randomUUID().toString();
 
     private Serializer serializer = new DefaultSerializer();
