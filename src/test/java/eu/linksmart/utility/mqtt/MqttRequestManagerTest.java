@@ -7,6 +7,8 @@ import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.serialization.Serializer;
 
+import java.util.Collections;
+
 import static org.junit.Assert.fail;
 
 /**
@@ -21,7 +23,7 @@ public class MqttRequestManagerTest {
             Statement statement = new StatementInstance(
                     "test",
                     "select count(*) as count from Observation output every 1 sec",
-                    new String[]{"local"}
+                    Collections.singletonList("local")
             );
 
             MultiResourceResponses responses = requestManager.request("/statement/new/test/",serializer.serialize(statement), 3,3000,null,null);
