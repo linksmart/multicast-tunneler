@@ -3,10 +3,7 @@ package eu.linksmart.utility.mqtt;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
-import eu.linksmart.services.utils.serialization.DefaultDeserializer;
-import eu.linksmart.services.utils.serialization.DefaultSerializer;
-import eu.linksmart.services.utils.serialization.Deserializer;
-import eu.linksmart.services.utils.serialization.Serializer;
+import eu.linksmart.services.utils.serialization.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -52,8 +49,7 @@ public class RestInit {
     static final String SPRING_MANAGED_FEATURES = "spring_managed_configuration_features";
     private static boolean gpl = false;
 
-    private Serializer serializer = new DefaultSerializer();
-    private Deserializer deserializer = new DefaultDeserializer();
+    private SerializerDeserializer serializer = new DefaultSerializerDeserializer();
 
     public static void init() {
 
