@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.springframework.web.servlet.HandlerMapping;
@@ -80,6 +81,46 @@ public class Rest2Mqtt {
 
         }
         return prepareHTTPResponse(responses);
+    }
+    @ApiOperation(value = "publish", nickname = "pub")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "publish", value = "A message is published", required = false, dataType = "string", paramType = "path")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK 200: operation was executed successful", response = MultiResourceResponses.class),
+            @ApiResponse(code = 200, message = "Created 201: operation had been deployed successful", response = MultiResourceResponses.class),
+            @ApiResponse(code = 207, message = "Multi-response 207: the operation got several successful responses", response = MultiResourceResponses.class),
+            @ApiResponse(code = 304, message = "Not Modified: this exact resource already exists in this service", response = MultiResourceResponses.class),
+            @ApiResponse(code = 400, message = "Bad request: the body presents problems such as syntax or parsing error ", response = MultiResourceResponses.class),
+            @ApiResponse(code = 404, message = "Not Found: either the resource was not found or the one or more servers that provide the resource was not found", response = MultiResourceResponses.class),
+            @ApiResponse(code = 409, message = "Conflict: The id sent in the request exists already. If want to be updated make an update request", response = MultiResourceResponses.class),
+            @ApiResponse(code = 400, message = "Bad Request 400: parsing error"),
+            @ApiResponse(code = 500, message = "General Error: any internal error. Several messages can be generated here", response = MultiResourceResponses.class),
+            @ApiResponse(code = 503, message = "Service Unavailable: internal service or a server was not available", response = MultiResourceResponses.class)})
+    @RequestMapping(value="/publish/**", method= RequestMethod.POST, consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> publish(
+            @RequestParam(name="qos",defaultValue = "0", required = false) int qos,
+            @RequestParam(name="retention",defaultValue = "false", required = false) boolean retention,
+            @RequestBody(required = false) String remoteRequest, HttpServletRequest  request
+    ) {
+        MultiResourceResponses<Map> req = new MultiResourceResponses<>();
+        Map<String,String> resource = new Hashtable<>();
+        resource.put("topic", request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE).toString().replace("/publish/", ""));
+        resource.put("payload", remoteRequest);
+
+        if (requestManager.publish(
+                resource.getOrDefault("topic",""),
+                remoteRequest.getBytes(),
+                qos,
+                retention)) {
+            req.addResponse(createSuccessMapMessage(resource.getOrDefault("topic",""),"","",200,"Ok","OK"));
+            req.getResponsesTail().setTopic(resource.getOrDefault("topic",""));
+            return prepareHTTPResponse(req);
+        }
+        req.addResponse(createErrorMapMessage(resource.getOrDefault("topic",""),"Service",500,"INTERNAL_SERVER_ERROR","INTERNAL_SERVER_ERROR"));
+        req.getResponsesTail().setTopic(resource.getOrDefault("topic",""));
+        return new ResponseEntity<String>("INTERNAL_SERVER_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
     public static ResponseEntity<String>  prepareHTTPResponse( MultiResourceResponses<Map> result){
         // preparing pointers

@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
 import org.apache.http.client.fluent.*;
 
@@ -32,6 +33,7 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 13.12.2017 a researcher of Fraunhofer FIT.
  */
+@RestController
 public class Mqtt2Rest implements MqttMessageObserver {
     private transient static final Logger loggerService = LogManager.getLogger(Mqtt2Rest.class);
     private transient final static String HTTP_METHOD_STRING = "method",HTTP_HEADERS_STRING = "headers", PATH_SUFFIX ="/rest/", BROKER_PROFILE = "default", SERVICE_WILL="will_message", SERVICE_WILL_TOPIC="will_topic", DEFAULT_TOPIC_STRUCTURE="return_topic_structure",TIMEOUT="timeout";

@@ -35,6 +35,7 @@ public class MqttRequestManager<T>  {
     private Deserializer deserializer = new DefaultDeserializer();
 
     public MqttRequestManager() throws MalformedURLException, MqttException {
+        conf.enableEnvironmentalVariables();
         this.broker = new StaticBroker(
                 BROKER_PROFILE,
                 conf.getString(SERVICE_WILL),
@@ -66,7 +67,16 @@ public class MqttRequestManager<T>  {
 
         return responses;
     }
+    public boolean publish(String topic, byte[] payload, int qos, boolean retention){
+        try {
+            broker.publish(topic,payload,qos,retention);
+            return true;
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(),e);
+            return false;
+        }
 
+    }
     public MultiResourceResponses<T> request(String topic, byte[] payload) throws Exception {
 
         return request(topic, payload,-1,conf.getLong(TIMEOUT));
