@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by José Ángel Carvajal on 06.12.2017 a researcher of Fraunhofer FIT.
  */
 public class MqttRequestManager<T>  {
-    private static final String BROKER_PROFILE = "default", SERVICE_WILL="will_message", SERVICE_WILL_TOPIC="will_topic", DEFAULT_TOPIC_STRUCTURE="return_topic_structure",TIMEOUT="timeout", HOST_NAME= "linksmart_service_dns_hostname", LINKSMART_REGISTRATION_TOPIC= "linksmart_service_registration_topic";
+    private static final String BROKER_PROFILE = "default", SERVICE_WILL="will_message", SERVICE_WILL_TOPIC="will_topic", DEFAULT_TOPIC_STRUCTURE="return_topic_structure",TIMEOUT="timeout";
 
     private transient StaticBroker broker;
 
