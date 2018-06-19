@@ -94,7 +94,7 @@ public class RestInit {
 
                 myRegistration.setDescription("LinkSmart(R) Multicaster tunneler");
                 myRegistration.setName("_linksmart-mps.tcp_");
-                myRegistration.setId(conf.containsKeyAnywhere(MPS_ID)?conf.getString(MPS_ID):UUID.randomUUID().toString());
+                myRegistration.setId(conf.containsKeyAnywhere(MPS_ID)?conf.getString(MPS_ID):host);
 
                 myRegistration.setApis(new ConcurrentHashMap<>());
                 myRegistration.setDocs(new ArrayList<>());
