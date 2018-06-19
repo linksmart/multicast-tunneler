@@ -59,7 +59,7 @@ public class Rest2Mqtt {
             @ApiResponse(code = 400, message = "Bad Request 400: parsing error"),
             @ApiResponse(code = 500, message = "General Error: any internal error. Several messages can be generated here", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: internal service or a server was not available", response = MultiResourceResponses.class)})
-    @RequestMapping(value="/mqtt/**", method= RequestMethod.POST, consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/mqtt/**", method= RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> request(
             @RequestParam(name="n",defaultValue = "1", required = false) int n,
             @RequestParam(name="timeout",defaultValue = "30000", required = false) long timeout,
@@ -97,7 +97,7 @@ public class Rest2Mqtt {
             @ApiResponse(code = 400, message = "Bad Request 400: parsing error"),
             @ApiResponse(code = 500, message = "General Error: any internal error. Several messages can be generated here", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: internal service or a server was not available", response = MultiResourceResponses.class)})
-    @RequestMapping(value="/publish/**", method= RequestMethod.POST, consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/publish/**", method= RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> publish(
             @RequestParam(name="qos",defaultValue = "0", required = false) int qos,
             @RequestParam(name="retention",defaultValue = "false", required = false) boolean retention,
