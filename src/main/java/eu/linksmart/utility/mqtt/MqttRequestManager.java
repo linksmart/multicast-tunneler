@@ -3,6 +3,7 @@ package eu.linksmart.utility.mqtt;
 import eu.linksmart.api.event.types.impl.AsyncRequest;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
+import eu.linksmart.services.utils.EditableService;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.subscription.MqttMessageObserver;
@@ -11,28 +12,36 @@ import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.services.utils.serialization.Serializer;
+import io.swagger.client.ApiClient;
+import io.swagger.client.api.ScApi;
+import io.swagger.client.model.ServiceDocs;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.apache.logging.log4j.Logger;
+import io.swagger.client.model.Service;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by José Ángel Carvajal on 06.12.2017 a researcher of Fraunhofer FIT.
  */
 public class MqttRequestManager<T>  {
-    private static final String BROKER_PROFILE = "default", SERVICE_WILL="will_message", SERVICE_WILL_TOPIC="will_topic", DEFAULT_TOPIC_STRUCTURE="return_topic_structure",TIMEOUT="timeout";
+    private static final String BROKER_PROFILE = "default", SERVICE_WILL="will_message", SERVICE_WILL_TOPIC="will_topic", DEFAULT_TOPIC_STRUCTURE="return_topic_structure",TIMEOUT="timeout", HOST_NAME= "linksmart_service_dns_hostname", LINKSMART_REGISTRATION_TOPIC= "linksmart_service_registration_topic";
 
     private transient StaticBroker broker;
 
     static transient private Configurator conf = Configurator.getDefaultConfig();
     static transient private Logger loggerService = LogManager.getLogger(MqttRequestManager.class);
+
     public static final String id = UUID.randomUUID().toString();
 
     private Serializer serializer = new DefaultSerializer();
     private Deserializer deserializer = new DefaultDeserializer();
+
 
     public MqttRequestManager() throws MalformedURLException, MqttException {
         conf.enableEnvironmentalVariables();
@@ -42,7 +51,10 @@ public class MqttRequestManager<T>  {
                 conf.getString(SERVICE_WILL_TOPIC)
 
         );
+
+
     }
+
   /*  public void request(String topic, byte[] payload, String returnTopic, int n, Observer observer) {
         new Thread(() -> {
             try {

@@ -1,9 +1,14 @@
 package eu.linksmart.utility.mqtt;
 
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
+import eu.linksmart.services.utils.EditableService;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.serialization.*;
+import io.swagger.client.ApiClient;
+import io.swagger.client.api.ScApi;
+import io.swagger.client.model.Service;
+import io.swagger.client.model.ServiceDocs;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -29,7 +34,9 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by José Ángel Carvajal on 10.04.2017 a researcher of Fraunhofer FIT.
@@ -46,10 +53,11 @@ public class RestInit {
     protected transient static Logger loggerService = LogManager.getLogger(RestInit.class);
     private static Configurator conf = Configurator.getDefaultConfig();
     private static boolean la = false;
-    static final String SPRING_MANAGED_FEATURES = "spring_managed_configuration_features";
+    static final String SPRING_MANAGED_FEATURES = "spring_managed_configuration_features", CATALOG_ENDPOINT= "linksmart_service_catalog_endpoint", HOST_NAME= "linksmart_service_dns_hostname";
     private static boolean gpl = false;
 
-    private SerializerDeserializer serializer = new DefaultSerializerDeserializer();
+    private static SerializerDeserializer serializer = new DefaultSerializerDeserializer();
+    private static String MPS_ID = "linksmart_mps_id";
 
     public static void init() {
 
@@ -75,6 +83,46 @@ public class RestInit {
 
         springApp.addInitializers();
         springApp.run();
+        if(conf.containsKeyAnywhere(CATALOG_ENDPOINT)){
+            try {
+                String host = conf.containsKeyAnywhere(HOST_NAME) ? conf.getString(HOST_NAME) : InetAddress.getLocalHost().getHostName();
+                ApiClient client = new ApiClient();
+                client.setBasePath(conf.getString(CATALOG_ENDPOINT));
+
+                ScApi SCclient = new ScApi(client);
+                EditableService myRegistration = new EditableService();
+
+                myRegistration.setDescription("LinkSmart(R) Multicaster tunneler");
+                myRegistration.setName("_linksmart-mps.tcp_");
+                myRegistration.setId(conf.containsKeyAnywhere(MPS_ID)?conf.getString(MPS_ID):UUID.randomUUID().toString());
+
+                myRegistration.setApis(new ConcurrentHashMap<>());
+                myRegistration.setDocs(new ArrayList<>());
+                myRegistration.setTtl(0L);
+
+                String port = conf.containsKeyAnywhere("server_port") ?conf.getString("server_port"):"8312", protocol = "http";
+                if (conf.containsKeyAnywhere("server_ssl_key-store"))
+                    protocol = "https";
+
+                myRegistration.getApis().put("rest2mqtt", protocol + "://" + host + ":" + port + "/rest/");
+                myRegistration.getApis().put("rest2mqtt-lite", protocol + "://" + host + ":" + port + "/mqtt/");
+                myRegistration.getApis().put("post2pub", protocol + "://" + host + ":" + port + "/publish/");
+
+                ServiceDocs doc = new ServiceDocs();
+                doc.setDescription("Open API V2");
+                doc.setUrl(protocol + "://" + host + ":" + port + "/swagger-ui.html");
+                doc.setType("openAPI");
+                doc.setApis(new ArrayList<>(myRegistration.getApis().values()));
+                myRegistration.setDocs(Arrays.asList(doc));
+
+                loggerService.info("registering service as "+ serializer.toString(myRegistration));
+                SCclient.idPut(myRegistration.getId(),myRegistration);
+
+
+            }catch (Exception e){
+                loggerService.error(e.getMessage(),e);
+            }
+        }
 
 
     }
