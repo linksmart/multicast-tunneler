@@ -76,13 +76,13 @@
         <java.junit.version>4.12</java.junit.version>
         <ls.se.agents.version>1.8.1-SNAPSHOT</ls.se.agents.version>
         <springfox.version>2.7.0</springfox.version>
-        <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
+        <spring.boot.version>1.5.14.RELEASE</spring.boot.version>
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <apache.fluent.hc.version>4.5.2</apache.fluent.hc.version>
         <maven.source.version>2.2.1</maven.source.version>
         <maven.jar.plugin.version>2.6</maven.jar.plugin.version>
         <start-class>eu.linksmart.services.Application</start-class>
-        <java.version>1.8</java.version>
+        <java.version>1.10</java.version>
     </properties>
     <dependencies>
         <dependency>

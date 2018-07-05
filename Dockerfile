@@ -15,4 +15,4 @@ LABEL maintainer="Jose Angel Carvajal Soto <carvajal@fit.fhg.de>"
 ADD target/*.jar ./
 
 # starting the agent
-ENTRYPOINT ["java", "-cp","./*", "org.springframework.boot.loader.PropertiesLauncher"]
+ENTRYPOINT ["java","--add-modules", "java.xml.bind", "-cp","./*", "org.springframework.boot.loader.PropertiesLauncher"]
