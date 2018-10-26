@@ -26,6 +26,7 @@ import org.apache.http.client.fluent.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -267,10 +268,10 @@ public class Mqtt2Rest implements MqttMessageObserver {
     }
 
     public static GeneralRequestResponse createErrorMapMessage(String generatedBy, String producerType, int codeNo, String codeTxt, String message){
-        return new GeneralRequestResponse(codeTxt, MqttRequestManager.id,null,producerType,message,codeNo, "");
+        return new GeneralRequestResponse(codeTxt, MqttRequestManager.id,null,producerType,message,codeNo, Collections.singletonList(""));
     }
     public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message){
-        return new GeneralRequestResponse(codeTxt, id,processedBy,producerType,message,codeNo, "");
+        return new GeneralRequestResponse(codeTxt, id,processedBy,producerType,message,codeNo, Collections.singletonList(""));
     }
     public static String toJsonString(Object message){
 

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -114,11 +115,11 @@ public class Rest2Mqtt {
                 qos,
                 retention)) {
             req.addResponse(createSuccessMapMessage(resource.getOrDefault("topic",""),"","",200,"Ok","OK"));
-            req.getResponsesTail().setTopic(resource.getOrDefault("topic",""));
+          //  req.getResponsesTail().set(resource.getOrDefault("topic",""));
             return prepareHTTPResponse(req);
         }
         req.addResponse(createErrorMapMessage(resource.getOrDefault("topic",""),"Service",500,"INTERNAL_SERVER_ERROR","INTERNAL_SERVER_ERROR"));
-        req.getResponsesTail().setTopic(resource.getOrDefault("topic",""));
+        //req.getResponsesTail().setTopic(resource.getOrDefault("topic",""));
         return new ResponseEntity<String>("INTERNAL_SERVER_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
@@ -150,10 +151,10 @@ public class Rest2Mqtt {
     }
 
     public static GeneralRequestResponse createErrorMapMessage(String generatedBy,String producerType,int codeNo, String codeTxt,String message){
-        return new GeneralRequestResponse(codeTxt, MqttRequestManager.id,null,producerType,message,codeNo, "");
+        return new GeneralRequestResponse(codeTxt, MqttRequestManager.id,null,producerType,message,codeNo, Collections.singletonList(""));
     }
     public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message){
-        return new GeneralRequestResponse(codeTxt, id,processedBy,producerType,message,codeNo, "");
+        return new GeneralRequestResponse(codeTxt, id,processedBy,producerType,message,codeNo, Collections.singletonList(""));
     }
     public static String toJsonString(Object message){
 
