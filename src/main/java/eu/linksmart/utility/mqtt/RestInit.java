@@ -98,7 +98,7 @@ public class RestInit {
 
                 myRegistration.setApis(new ConcurrentHashMap<>());
                 myRegistration.setDocs(new ArrayList<>());
-                myRegistration.setTtl(0L);
+                myRegistration.setTtl(86400L);
 
                 String port = conf.containsKeyAnywhere("server_port") ?conf.getString("server_port"):"8312", protocol = "http";
                 if (conf.containsKeyAnywhere("server_ssl_key-store"))
